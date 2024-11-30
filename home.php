@@ -2,6 +2,21 @@
 session_start();
 include('db.php');
 
+// กำหนด Timeout เป็น 5 นาที (300 วินาที)
+$timeout_duration = 300;
+
+// ตรวจสอบเวลาล่าสุด
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
+    // หากเกินเวลาที่กำหนด ให้ทำการ Logout
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+// อัปเดตเวลาล่าสุด
+$_SESSION['last_activity'] = time();
+
 // ตรวจสอบว่าผู้ใช้ล็อกอินหรือยัง
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
