@@ -1,5 +1,23 @@
 <?php include('templates/header.php'); ?>
 
+<?php
+// แสดงข้อความแจ้งเตือนเมื่อ Timeout
+if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
+    echo "
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Session Expired',
+                text: 'Your session has timed out. Please log in again.',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>";
+}
+?>
+
 <h2 class="text-center mb-4">Login</h2>
 
 <form action="process.php" method="POST" class="w-50 mx-auto">
