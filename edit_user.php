@@ -2,6 +2,18 @@
 session_start();
 include('db.php');
 
+// โค้ดตรวจสอบ Timeout 
+$timeout_duration = 300;
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
 // ตรวจสอบว่าผู้ใช้ล็อกอินหรือยัง
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
@@ -114,7 +126,13 @@ if (isset($_POST['update'])) {
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" name="update" class="btn btn-primary w-100">Update</button>
+    <div class="mb-3">
+        <button type="submit" name="update" class="btn btn-primary w-100">Update</button>
+    </div>
+
+    <div class="mb-3">
+        <a href="logout.php" class="btn btn-warning w-100">Logout</a>
+    </div>
 </form>
 
 <?php include('templates/footer.php'); ?>
